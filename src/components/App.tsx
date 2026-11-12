@@ -44,8 +44,12 @@ export default function App({ lang }: { lang: Lang }) {
   const [now, setNow] = useState(0);
 
   // 端末に保存した記録を読み込む(サーバーには何も送らない)
+  // Next.jsは前の言語の画面を隠したまま残し、戻ったときに再表示する。
+  // そのたびにこの処理が動くので、ここで記録を読み直し、切り替え中の状態(薄く消えたまま)を元に戻す。
   useEffect(() => {
     storeRef.current = loadStore();
+    S.swap = false; S.leaving = false; S.modal = null; S.info = null; S.img = null;
+    force();
     try {
       const st = sessionStorage.getItem(START_KEY);
       if (st) { sessionStorage.removeItem(START_KEY); S.screen = st as Screen; }
