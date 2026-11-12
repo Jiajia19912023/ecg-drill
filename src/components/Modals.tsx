@@ -24,7 +24,7 @@ function Sheet({ label, onClose, children, max }: { label: string; onClose: () =
 }
 
 export function Modals() {
-  const { S, L, t, act } = useApp();
+  const { S, L, t, act, winW } = useApp();
   if (S.modal) {
     const c = caseById(S.modal.caseId)!;
     return (
@@ -39,10 +39,21 @@ export function Modals() {
     );
   }
   if (S.img) {
+    // 横向きのときは、画像全体を画面いっぱいに表示する
+    const land = typeof window !== 'undefined' && winW > window.innerHeight;
+    if (land) {
+      return (
+        <div className="imgfull" role="dialog" aria-modal="true" aria-label={S.img.alt} onClick={act.closeImg}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={S.img.src} alt={S.img.alt} />
+          <button type="button" className="imgclose" onClick={act.closeImg} aria-label={L('閉じる', 'Close')}>{IC.close()}</button>
+        </div>
+      );
+    }
     return (
       <Sheet label={S.img.alt} onClose={act.closeImg} max={1200}>
         <div className="row-b" style={{ padding: '8px 8px 4px 16px' }}>
-          <span className="sub">{L('横にスクロールできます', 'Scroll sideways')}</span>
+          <span className="sub">{L('横にスクロールできます。スマホを横にすると全体を表示します', 'Scroll sideways, or turn your phone to see the whole image')}</span>
           <button type="button" className="ib" onClick={act.closeImg} aria-label={L('閉じる', 'Close')}>{IC.close()}</button>
         </div>
         <div className="hscroll" style={{ padding: '0 0 12px' }}>

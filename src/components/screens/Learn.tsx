@@ -25,7 +25,7 @@ export function Learn() {
                       <img src={im.src} alt={im.alt} loading="lazy" />
                     </button>
                   ))}
-                  <span className="sub">{L('画像をタップすると拡大できます', 'Tap an image to enlarge it')}</span>
+                  <span className="sub">{L('画像をタップすると拡大できます。拡大中にスマホを横にすると、全体を画面いっぱいに表示します', 'Tap an image to enlarge it. While enlarged, turn your phone sideways to see the whole image full screen')}</span>
                 </div>
               ) : it.src
                 ? it.type === 'video'

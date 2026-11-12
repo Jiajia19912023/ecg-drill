@@ -190,7 +190,7 @@ h2.q{font-size:18px;color:var(--navy)}
 /* ダークモード:画面を反転し、方眼紙・見本の図・濃い色のカードは元の色に戻す */
 html.dark,html.dark body{background:#0B1220}
 html.dark #app{background:#0F172A}
-html.dark #app>*:not(.modal):not(.splash){filter:invert(1) hue-rotate(180deg)}
+html.dark #app>*:not(.modal):not(.splash):not(.imgfull){filter:invert(1) hue-rotate(180deg)}
 html.dark .paper,html.dark .hero,html.dark .lmap span.on,html.dark img,html.dark video{filter:invert(1) hue-rotate(180deg)}
 html.dark #app>.splash{filter:none}
 html.dark .modal .sheet{filter:invert(1) hue-rotate(180deg)}
@@ -218,3 +218,8 @@ html,body{transition:background-color .9s ease}
 .toast{white-space:nowrap}
 .imgbtn{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;cursor:zoom-in}
 .imgbtn img{width:100%;height:auto;display:block}
+.imgfull{position:fixed;inset:0;z-index:60;background:#000;display:flex;align-items:center;justify-content:center}
+.imgfull img{max-width:100vw;max-height:100vh;max-height:100dvh;width:auto;height:auto;object-fit:contain;display:block}
+html.dark .imgfull img{filter:none}
+.imgclose{position:absolute;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));width:44px;height:44px;border-radius:999px;border:0;background:rgba(255,255,255,.85);color:#0F172A;display:flex;align-items:center;justify-content:center;cursor:pointer}
+html.dark .imgclose{filter:none}
