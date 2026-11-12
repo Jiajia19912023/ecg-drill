@@ -5,7 +5,7 @@ import { ansOf, type QuizQ } from '@/data/readquiz';
 import { pct } from '@/lib/store';
 import { useApp, type QuizSess } from '../AppCtx';
 import { QuizFigure } from '../ecg';
-import { IC, LvBadge, TopBar } from '../ui';
+import { IC, LvBadge, QuitButton, TopBar } from '../ui';
 
 export function QuizMenu() {
   const { L, t, S, store, act } = useApp();
@@ -55,7 +55,7 @@ export function Quiz() {
   const ans = ansOf(q, lang), ok = sel === ans;
   return (
     <>
-      <TopBar title={catName} sub={L('基礎クイズ', 'Basics quiz')} right={`${ss.i + 1}/${ss.list.length}`} />
+      <TopBar title={catName} sub={`${L('基礎クイズ', 'Basics quiz')} ${ss.i + 1}/${ss.list.length}`} right={<QuitButton />} />
       <div className="bar" style={{ margin: '0 16px', borderRadius: 3, height: 6 }}><i style={{ width: `${((ss.i + (answered ? 1 : 0)) / ss.list.length) * 100}%` }} /></div>
       <main className="wrap grow">
         <div className="row" style={{ gap: 8 }}><LvBadge lv={q.lv} /><span className="sub">{q.id.startsWith('R') ? '' : 'Q'}{q.id}</span></div>

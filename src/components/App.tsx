@@ -356,6 +356,11 @@ export default function App({ lang }: { lang: Lang }) {
       S.sess = ss; go(d.screen);
     },
     discardResume() { clearResume(); render(); },
+    quit() {
+      const ss = S.sess, sample = ss?.kind === 'quick' && ss.sample;
+      if (!sample && ss && (S.screen === 'step' || S.screen === 'quick' || S.screen === 'quiz')) { saveResume(S.screen, ss); toast(L('途中まで保存しました', 'Progress saved'), true); }
+      go('home');
+    },
     doReset() { storeRef.current = emptyStore(); save(); clearResume(); S.confirmReset = false; go('home'); },
     setLang(l) {
       if (l === lang) return;

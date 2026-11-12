@@ -3,7 +3,7 @@
 import { practiceById } from '@/lib/logic';
 import { useApp, type QuickSess } from '../AppCtx';
 import { Viewer } from '../ecg';
-import { IC, Legend, OverlaySwitch, TopBar } from '../ui';
+import { IC, Legend, OverlaySwitch, QuitButton, TopBar } from '../ui';
 
 export function QuickMenu() {
   const { L, store, act } = useApp();
@@ -78,13 +78,13 @@ export function Quick() {
   const ss = S.sess as QuickSess, c = practiceById(ss.caseId), corr = c.id;
   const title = { practice: L('練習', 'Practice'), s60: L('60秒チャレンジ', '60-second challenge'), review: L('今日の復習', 'Today’s review') }[ss.sub];
   const remain = Math.max(0, 60000 - ((now || Date.now()) - ss.start) - ss.penalty);
-  const right = ss.sub === 's60' ? L(`${Math.ceil(remain / 1000)}秒`, `${Math.ceil(remain / 1000)} s`) : '';
+  const right = ss.sub === 's60' ? L(`${Math.ceil(remain / 1000)}秒`, `${Math.ceil(remain / 1000)} s left`) : '';
   const prog = ss.sub === 'review' ? L(`${ss.i + 1} / ${ss.queue.length}問`, `${ss.i + 1} / ${ss.queue.length}`) : L(`${ss.i + 1}問目`, `Case ${ss.i + 1}`);
   const lastLog = ss.log[ss.log.length - 1];
   const ok = ss.sel === corr;
   return (
     <>
-      <TopBar title={title} sub={prog} right={right} />
+      <TopBar title={title} sub={right ? `${prog}${L('・残り', ' · ')}${right}` : prog} right={<QuitButton />} />
       <main className="wrap grow" style={{ gap: 12, paddingTop: 10 }}>
         {ss.sample ? <div className="hintbox" style={{ padding: '6px 10px' }}>{L('サンプルの復習です(記録されません)', 'This is a sample review (not recorded)')}</div> : null}
         {ss.sub === 'review' && ss.revMap && ss.revMap[ss.caseId] ? <div className="row" style={{ gap: 8 }}><span className="tag">{L(`復習 ${ss.revMap[ss.caseId].stage + 1}回目`, `Review #${ss.revMap[ss.caseId].stage + 1}`)}</span><span className="sub">{L('前に間違えた問題です', 'You missed this one before')}</span></div> : null}

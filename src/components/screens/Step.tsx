@@ -4,7 +4,7 @@ import { LEVEL_COLORS, LEVEL_STEPS, STEPS } from '@/data/cases';
 import { answerFor, fmtAns, optLabel, practiceById, sameAns, whyFor } from '@/lib/logic';
 import { useApp, type StepSess } from '../AppCtx';
 import { Viewer } from '../ecg';
-import { IC, Legend, LvBadge, OverlaySwitch, TopBar } from '../ui';
+import { IC, Legend, LvBadge, OverlaySwitch, QuitButton, TopBar } from '../ui';
 
 const REFS = 'AHA/ACCF/HRS ECG Standardization Part I–VI (2007, 2009) / Fourth Universal Definition of Myocardial Infarction (2018)';
 
@@ -19,7 +19,7 @@ export function Step() {
   const focus = def.focus || [];
   return (
     <>
-      <TopBar title={L('順番に読む練習', 'Step-by-step reading')} right={`${ss.idx + 1}/${keys.length}`} />
+      <TopBar title={L('順番に読む練習', 'Step-by-step reading')} sub={`${ss.idx + 1}/${keys.length}`} right={<QuitButton />} />
       <main className="wrap grow" style={{ gap: 12, paddingTop: 10 }}>
         <div className="segbar" style={{ gridTemplateColumns: `repeat(${keys.length},1fr)` }}>
           {keys.map((k, i) => <i key={k} className={i < ss.idx ? 'd' : ''} style={i === ss.idx ? { background: LEVEL_COLORS[ss.level].bar } : undefined} />)}

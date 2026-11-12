@@ -28,7 +28,6 @@ export function Splash() {
       <svg width={W} height="170" viewBox={`0 0 ${W} 170`} className="beat" aria-hidden="true">
         <path ref={ref} d={d} fill="none" stroke="#1A1A1A" strokeWidth="2.6" strokeLinejoin="round" strokeLinecap="round" />
       </svg>
-      <span className="pill" style={{ top: 548, fontSize: 17, fontWeight: 700 }}>{L('12誘導心電図トレーニング', '12-lead ECG training')}</span>
     </button>
   );
 }

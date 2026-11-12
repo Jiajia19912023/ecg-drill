@@ -25,6 +25,7 @@ export const IC = {
   play: () => svg(44, <><circle cx="12" cy="12" r="10" /><path d="M10 8l6 4-6 4z" /></>, { stroke: '#64748B', sw: 1.6 }),
   image: () => svg(44, <><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="9" cy="10" r="2" /><path d="M21 17l-5-5-9 8" /></>, { stroke: '#64748B', sw: 1.6 }),
   learn: () => svg(24, <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M10 9l5 3-5 3z" /></>),
+  pause: () => svg(16, <path d="M9 6v12M15 6v12" />, { sw: 2.4 }),
   wave: (w = 18) => svg(w, <path d="M2 14h4l2-6 3 10 2-4h9" />, { sw: 2 }),
 };
 
@@ -112,4 +113,10 @@ export function TabsBar({ tab, onTab }: { tab: Tab; onTab: (t: Tab) => void }) {
       {list.map(([id, lb]) => <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'on' : ''} onClick={() => onTab(id)}>{lb}</button>)}
     </div>
   );
+}
+
+/** 練習・クイズを途中でやめる(その時点まで自動保存してホームへ) */
+export function QuitButton() {
+  const { L, act } = useApp();
+  return <button type="button" className="quit" onClick={act.quit} aria-label={L('やめる(途中まで保存)', 'Quit (progress is saved)')}>{IC.pause()}{L('やめる', 'Quit')}</button>;
 }

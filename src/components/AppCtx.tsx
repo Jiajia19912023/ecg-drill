@@ -57,7 +57,7 @@ export type Actions = {
   info(id: string): void; closeInfo(): void;
   copyExport(): Promise<boolean>; toggleExport(): void; importRec(text: string): void; askReset(): void; cancelReset(): void; doReset(): void;
   setLang(l: Lang): void;
-  resume(): void; discardResume(): void;
+  resume(): void; discardResume(): void; quit(): void;
 };
 
 export type AppApi = {
