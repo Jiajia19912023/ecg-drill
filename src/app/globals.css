@@ -215,3 +215,4 @@ html.dark .modal .sheet .paper{filter:invert(1) hue-rotate(180deg)}
 #app.swap{opacity:0;transition-duration:.45s}
 #app.softin>*{animation:fi 1.2s ease both}
 html,body{transition:background-color .9s ease}
+.toast{white-space:nowrap}

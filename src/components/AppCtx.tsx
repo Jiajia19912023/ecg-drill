@@ -34,7 +34,6 @@ export type State = {
   cmp: { caseId: string; lead: string; mode: 'overlay' | 'stack'; diff: boolean } | null;
   back: Screen;
   revSample: boolean;
-  anaSample: boolean;
   qmOpen: Record<string, boolean>;
   confirmReset: boolean;
   showExport: boolean;
@@ -54,7 +53,7 @@ export type Actions = {
   startQuick(sub: 'practice' | 's60'): void; review(): void; revList(sample: boolean): void; revStart(): void;
   qopt(i: number): void; expShow(): void; expCheck(i: number): void; expText(v: string): void; qnext(): void;
   startQuiz(cat: number): void; zopt(o: number): void; znext(): void;
-  anaMode(sample: boolean): void; theme(t: 'light' | 'dark'): void; qmToggle(g: string): void;
+  theme(t: 'light' | 'dark'): void; qmToggle(g: string): void;
   gstart(): void; gsel(v: string): void; gnext(): void; gprev(): void; gjump(k: string): void; gshow(id: string): void;
   info(id: string): void; closeInfo(): void;
   copyExport(): Promise<boolean>; toggleExport(): void; importRec(text: string): void; askReset(): void; cancelReset(): void; doReset(): void;

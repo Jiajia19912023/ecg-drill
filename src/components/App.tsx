@@ -29,7 +29,7 @@ const START_KEY = 'ecgdrill-start';
 const SOFT_KEY = 'ecgdrill-softin';
 const SWAP_MS = 450; // 消えるまでの時間
 const initialState = (): State => ({
-  screen: 'splash', sess: null, modal: null, info: null, g: null, cmp: null, back: 'home', revSample: false, anaSample: false,
+  screen: 'splash', sess: null, modal: null, info: null, g: null, cmp: null, back: 'home', revSample: false,
   qmOpen: {}, confirmReset: false, showExport: false, importMsg: '', fadeIn: false, swap: false, softIn: false, leaving: false, toast: null,
 });
 
@@ -310,7 +310,6 @@ export default function App({ lang }: { lang: Lang }) {
       if (sc === 'compare') return go(S.back || 'home');
       return go('home');
     },
-    anaMode(sample) { S.anaSample = sample; render(); window.scrollTo(0, 0); },
     theme(th) {
       if ((storeRef.current.theme || 'light') === th || S.swap) return;
       // いったんふわっと消してから色を変え、ゆっくり戻す

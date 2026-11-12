@@ -17,18 +17,6 @@ const LOOK_GROUPS: [string, string, string, string, string[]][] = [
 type Look = { name: string; desc: string; p: number | null; n: number };
 type Data = { tags: Record<string, Rec>; steps: Record<string, Rec>; cats: Record<string, Rec>; attempts: Pick<Attempt, 'ok' | 'at'>[]; waiting: number };
 
-function sampleData(): Data {
-  const day = 86400000, now = Date.now(), trend = [52, 58, 55, 64, 70, 68, 77], cnt = [6, 9, 4, 10, 8, 12, 9];
-  const attempts: Data['attempts'] = [];
-  trend.forEach((p, i) => { const n = cnt[i], c = Math.round(n * p / 100); for (let k = 0; k < n; k++) attempts.push({ ok: k < c, at: now - (6 - i) * day }); });
-  return {
-    tags: { normal: { c: 9, n: 10 } },
-    steps: { rhythm: { c: 18, n: 20 }, rate: { c: 16, n: 20 }, p: { c: 9, n: 10 }, pr: { c: 12, n: 16 }, qrs: { c: 11, n: 18 }, axis: { c: 6, n: 15 }, qt: { c: 7, n: 16 }, stt: { c: 10, n: 18 }, final: { c: 14, n: 22 } },
-    cats: { 101: { c: 11, n: 12 }, 102: { c: 7, n: 12 }, 103: { c: 13, n: 16 }, 104: { c: 6, n: 12 }, 105: { c: 8, n: 10 }, 106: { c: 4, n: 10 }, 107: { c: 7, n: 12 }, 1: { c: 8, n: 9 }, 4: { c: 7, n: 9 } },
-    attempts, waiting: 6,
-  };
-}
-
 function Radar({ vals, W, L }: { vals: Look[]; W: number; L: (ja: string, en: string) => string }) {
   const n = vals.length, cx = W / 2, cy = 135, R = 80, ang = (i: number) => -Math.PI / 2 + i * 2 * Math.PI / n;
   const pt = (i: number, r: number) => [cx + r * Math.cos(ang(i)), cy + r * Math.sin(ang(i))];
@@ -81,14 +69,14 @@ function Trend({ att, W, lang, L }: { att: Data['attempts']; W: number; lang: La
 }
 
 export function Analysis() {
-  const { L, t, S, store, act, W: W0, lang } = useApp();
+  const { L, t, store, W: W0, lang } = useApp();
   const realD: Data = (() => {
     const cats: Record<string, Rec> = {};
     QZ.qs.forEach((q) => { const r = store.quiz[q.id]; if (r) { const a = cats[q.cat] || (cats[q.cat] = { c: 0, n: 0 }); a.c += r.c; a.n += r.n; } });
     return { tags: store.tags, steps: store.steps, cats, attempts: store.attempts, waiting: Object.keys(store.review).length };
   })();
   const realEmpty = !Object.keys(realD.tags).length && !Object.keys(realD.steps).length && !Object.keys(realD.cats).length;
-  const sample = S.anaSample, D = sample ? sampleData() : realD, W = W0 - 28;
+  const D = realD, W = W0 - 28;
   const catRows = Object.entries(D.cats).filter(([, v]) => v.n).map(([k, v]) => ({ id: k, name: t((QZ.cats.find((c) => String(c.id) === k) || { name: { ja: k, en: k } }).name), p: pct(v)!, n: v.n })).sort((a, b) => a.p - b.p);
   const looks: Look[] = LOOK_GROUPS.map(([nj, ne, dj, de, ks]) => {
     const r = ks.reduce((a, k) => { const x = D.steps[k]; return x ? { c: a.c + x.c, n: a.n + x.n } : a; }, { c: 0, n: 0 });
@@ -100,18 +88,12 @@ export function Analysis() {
     <>
       <PlainTop title={L('苦手分析', 'Progress')} />
       <main className="wrap grow">
-        <div className="seg" style={{ gridTemplateColumns: '1fr 1fr' }}>
-          <button type="button" className={!sample ? 'on' : ''} onClick={() => act.anaMode(false)}>{L('あなたの記録', 'Your records')}</button>
-          <button type="button" className={sample ? 'on' : ''} onClick={() => act.anaMode(true)}>{L('サンプル', 'Sample')}</button>
-        </div>
-        {!sample && realEmpty ? (
+        {realEmpty ? (
           <div className="card col" style={{ gap: 10 }}>
             <p style={{ margin: 0 }}>{L('まだ記録がありません。判読やクイズに挑戦すると、ここに苦手な分野がグラフで表示されます。', 'No records yet. As you practice and take quizzes, your weak areas will be charted here.')}</p>
-            <button type="button" className="btn sec blue" onClick={() => act.anaMode(true)}>{L('サンプルで表示を見る', 'See a sample')}</button>
           </div>
         ) : (
           <>
-            {sample ? <div className="hintbox">{L('サンプルデータです(実際の記録ではありません)。記録がたまると、このように表示されます。', 'Sample data (not your records). This is how it will look once you have some records.')}</div> : null}
             <div className="tiles">
               <div className="tile"><span>{L('解いた問題', 'Answered')}</span><b>{allN}<small>{L('問', '')}</small></b></div>
               <div className="tile"><span>{L('全体の正答率', 'Overall')}</span><b>{allN ? Math.round(allC / allN * 100) : 0}<small>%</small></b></div>
