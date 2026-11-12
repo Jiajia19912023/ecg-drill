@@ -24,6 +24,9 @@ export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Prom
       ? '手元の心電図と照らし合わせて波形を振り返る、医療者向けの12誘導心電図トレーニング。ログイン不要・無料。'
       : 'A 12-lead ECG training app for clinicians: check the ECG in front of you step by step, then practice. Free, no login.',
     alternates: { languages: { ja: '/ja', en: '/en' } },
+    // ホーム画面に追加したときの名前
+    appleWebApp: { title: 'ECG DRILL' },
+    applicationName: 'ECG DRILL',
   };
 }
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#1E293B' };
