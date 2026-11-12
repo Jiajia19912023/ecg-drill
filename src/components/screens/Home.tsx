@@ -20,7 +20,6 @@ export function Home() {
         <div className="row-b" style={{ height: 48 }}>
           <div className="row" style={{ gap: 10 }}><Mark /><span style={{ fontSize: 20, fontWeight: 800, letterSpacing: '.04em' }}>ECG DRILL</span></div>
         </div>
-        <ResumeCard />
         <section className="hero">
           <div className="row" style={{ gap: 12, alignItems: 'flex-start' }}>
             <PaperThumb size={56} cls="hthumb" />
@@ -37,6 +36,7 @@ export function Home() {
         </section>
 
         <h2 style={{ marginTop: 6 }}>{L('練習・クイズ', 'Practice & quizzes')}</h2>
+        <ResumeCard />
         <button type="button" className="mode slim" onClick={() => (due ? act.review() : act.revList(false))}>
           <span className="micon sm" style={{ background: '#DBEAFE' }}>{IC.ok()}</span>
           <span className="mtext">
