@@ -16,9 +16,10 @@ export function Learn() {
             <section key={it.id} className="card col" style={{ gap: 10 }}>
               <div className="row" style={{ gap: 8 }}><span className="tag">{kind}</span><b style={{ fontSize: 16 }}>{t(it.title)}</b></div>
               <p className="sub" style={{ margin: 0 }}>{t(it.desc)}</p>
+              {it.note && t(it.note) ? <p className="sub" style={{ margin: 0, fontStyle: 'italic' }}>{t(it.note)}</p> : null}
               {it.src
                 ? it.type === 'video'
-                  ? <video src={it.src} controls playsInline style={{ width: '100%', borderRadius: 12, display: 'block' }} />
+                  ? <video src={it.src} controls playsInline preload="metadata" style={{ width: '100%', borderRadius: 12, display: 'block', background: '#0B1220' }} />
                   // eslint-disable-next-line @next/next/no-img-element
                   : <img src={it.src} alt={t(it.title)} style={{ width: '100%', borderRadius: 12, display: 'block' }} />
                 : <div className="ph" role="img" aria-label={L(`${kind}(準備中)`, `${kind} (coming soon)`)}>{it.type === 'video' ? IC.play() : IC.image()}<span>{L(`${kind}を準備中`, `${kind} coming soon`)}</span></div>}
