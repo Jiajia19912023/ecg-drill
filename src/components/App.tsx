@@ -26,9 +26,11 @@ import { Analysis } from './screens/Analysis';
 import { Settings } from './screens/Settings';
 
 const START_KEY = 'ecgdrill-start';
+const SOFT_KEY = 'ecgdrill-softin';
+const SWAP_MS = 450; // 消えるまでの時間
 const initialState = (): State => ({
   screen: 'splash', sess: null, modal: null, info: null, g: null, cmp: null, back: 'home', revSample: false, anaSample: false,
-  qmOpen: {}, confirmReset: false, showExport: false, importMsg: '', fadeIn: false, leaving: false, toast: null,
+  qmOpen: {}, confirmReset: false, showExport: false, importMsg: '', fadeIn: false, swap: false, softIn: false, leaving: false, toast: null,
 });
 
 export default function App({ lang }: { lang: Lang }) {
@@ -47,6 +49,7 @@ export default function App({ lang }: { lang: Lang }) {
     try {
       const st = sessionStorage.getItem(START_KEY);
       if (st) { sessionStorage.removeItem(START_KEY); S.screen = st as Screen; }
+      if (sessionStorage.getItem(SOFT_KEY)) { sessionStorage.removeItem(SOFT_KEY); S.softIn = true; setTimeout(() => { S.softIn = false; force(); }, 1300); }
     } catch { /* sessionStorageが使えない環境 */ }
     const onResize = () => setWin({ w: window.innerWidth, h: window.innerHeight });
     onResize();
@@ -308,7 +311,12 @@ export default function App({ lang }: { lang: Lang }) {
       return go('home');
     },
     anaMode(sample) { S.anaSample = sample; render(); window.scrollTo(0, 0); },
-    theme(th) { storeRef.current.theme = th; save(); render(); },
+    theme(th) {
+      if ((storeRef.current.theme || 'light') === th || S.swap) return;
+      // いったんふわっと消してから色を変え、ゆっくり戻す
+      S.swap = true; render();
+      setTimeout(() => { storeRef.current.theme = th; save(); render(); setTimeout(() => { S.swap = false; render(); }, 60); }, SWAP_MS);
+    },
     qmToggle(g) { S.qmOpen[g] = !S.qmOpen[g]; render(); },
     gstart() {
       const from: Screen = S.screen === 'guide' ? S.g?.from || 'home' : S.screen;
@@ -363,10 +371,13 @@ export default function App({ lang }: { lang: Lang }) {
     },
     doReset() { storeRef.current = emptyStore(); save(); clearResume(); S.confirmReset = false; go('home'); },
     setLang(l) {
-      if (l === lang) return;
-      try { sessionStorage.setItem(START_KEY, S.screen === 'splash' ? 'home' : S.screen === 'settings' ? 'settings' : 'home'); } catch { /* 無視 */ }
-      document.cookie = `lang=${l}; path=/; max-age=31536000; samesite=lax`;
-      router.push(`/${l}`);
+      if (l === lang || S.swap) return;
+      S.swap = true; render();
+      setTimeout(() => {
+        try { sessionStorage.setItem(START_KEY, S.screen === 'settings' ? 'settings' : 'home'); sessionStorage.setItem(SOFT_KEY, '1'); } catch { /* 無視 */ }
+        document.cookie = `lang=${l}; path=/; max-age=31536000; samesite=lax`;
+        router.push(`/${l}`);
+      }, SWAP_MS);
     },
   };
 
@@ -400,7 +411,7 @@ export default function App({ lang }: { lang: Lang }) {
   }
   return (
     <AppContext.Provider value={api}>
-      <div id="app" className={[wide ? 'wide' : '', S.fadeIn ? 'fadein' : ''].join(' ').trim()}>
+      <div id="app" className={[wide ? 'wide' : '', S.fadeIn ? 'fadein' : '', S.swap ? 'swap' : '', S.softIn ? 'softin' : ''].join(' ').trim()}>
         {body}
         <Modals />
       </div>

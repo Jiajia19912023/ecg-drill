@@ -40,6 +40,8 @@ export type State = {
   showExport: boolean;
   importMsg: string;
   fadeIn: boolean;
+  swap: boolean; // 言語・色を変えるとき、いったん薄く消す
+  softIn: boolean; // 言語を変えたあと、ゆっくり現れる
   leaving: boolean;
   toast: { text: string; ok: boolean; key: number } | null;
 };
