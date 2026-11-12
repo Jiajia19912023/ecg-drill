@@ -29,7 +29,7 @@ const START_KEY = 'ecgdrill-start';
 const SOFT_KEY = 'ecgdrill-softin';
 const SWAP_MS = 450; // 消えるまでの時間
 const initialState = (): State => ({
-  screen: 'splash', sess: null, modal: null, info: null, g: null, cmp: null, back: 'home', revSample: false,
+  screen: 'splash', sess: null, modal: null, info: null, img: null, g: null, cmp: null, back: 'home', revSample: false,
   qmOpen: {}, confirmReset: false, fadeIn: false, swap: false, softIn: false, leaving: false, toast: null,
 });
 
@@ -92,7 +92,7 @@ export default function App({ lang }: { lang: Lang }) {
   const save = () => saveStore(storeRef.current);
 
   function go(screen: Screen) {
-    S.screen = screen; S.modal = null; S.info = null;
+    S.screen = screen; S.modal = null; S.info = null; S.img = null;
     setNow(Date.now());
     render();
     if (typeof window !== 'undefined') window.scrollTo(0, 0);
@@ -343,6 +343,8 @@ export default function App({ lang }: { lang: Lang }) {
     gshow(id) { const g = S.g!; g.res = { ...(g.res || { forId: id }), id, tab: GUIDE_TAB[id] || 'limb', overlay: false } as typeof g.res; render(); window.scrollTo(0, 0); },
     info(id) { S.info = id; render(); },
     closeInfo() { S.info = null; render(); },
+    imgZoom(src, alt) { S.img = { src, alt }; render(); },
+    closeImg() { S.img = null; render(); },
     askReset() { S.confirmReset = true; render(); },
     cancelReset() { S.confirmReset = false; render(); },
     resume() {

@@ -38,6 +38,20 @@ export function Modals() {
       </Sheet>
     );
   }
+  if (S.img) {
+    return (
+      <Sheet label={S.img.alt} onClose={act.closeImg} max={1200}>
+        <div className="row-b" style={{ padding: '8px 8px 4px 16px' }}>
+          <span className="sub">{L('横にスクロールできます', 'Scroll sideways')}</span>
+          <button type="button" className="ib" onClick={act.closeImg} aria-label={L('閉じる', 'Close')}>{IC.close()}</button>
+        </div>
+        <div className="hscroll" style={{ padding: '0 0 12px' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={S.img.src} alt={S.img.alt} style={{ width: 1100, maxWidth: 'none', display: 'block' }} />
+        </div>
+      </Sheet>
+    );
+  }
   if (S.info) {
     const c = caseById(S.info), I = DIAG_INFO[S.info];
     if (!c || !I) return null;

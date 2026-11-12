@@ -216,3 +216,5 @@ html.dark .modal .sheet .paper{filter:invert(1) hue-rotate(180deg)}
 #app.softin>*{animation:fi 1.2s ease both}
 html,body{transition:background-color .9s ease}
 .toast{white-space:nowrap}
+.imgbtn{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;cursor:zoom-in}
+.imgbtn img{width:100%;height:auto;display:block}

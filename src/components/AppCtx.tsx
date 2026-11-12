@@ -30,6 +30,7 @@ export type State = {
   sess: StepSess | QuickSess | QuizSess | null;
   modal: { caseId: string; lead: string; overlay: boolean } | null;
   info: string | null;
+  img: { src: string; alt: string } | null;
   g: GuideState | null;
   cmp: { caseId: string; lead: string; mode: 'overlay' | 'stack'; diff: boolean } | null;
   back: Screen;
@@ -53,7 +54,7 @@ export type Actions = {
   startQuiz(cat: number): void; zopt(o: number): void; znext(): void;
   theme(t: 'light' | 'dark'): void; qmToggle(g: string): void;
   gstart(): void; gsel(v: string): void; gnext(): void; gprev(): void; gjump(k: string): void; gshow(id: string): void;
-  info(id: string): void; closeInfo(): void;
+  info(id: string): void; closeInfo(): void; imgZoom(src: string, alt: string): void; closeImg(): void;
   askReset(): void; cancelReset(): void; doReset(): void;
   setLang(l: Lang): void;
   resume(): void; discardResume(): void; quit(): void;
