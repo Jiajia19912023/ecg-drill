@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<defs><clipPath id="c"><rect width="64" height="64" rx="14"/></clipPath></defs>
+<g clip-path="url(#c)">
+<rect width="64" height="64" fill="#FFF7F7"/>
+<g stroke="#F6C9D2" stroke-width="1"><path d="M4 0V64M0 4H64"/><path d="M8 0V64M0 8H64"/><path d="M12 0V64M0 12H64"/><path d="M20 0V64M0 20H64"/><path d="M24 0V64M0 24H64"/><path d="M28 0V64M0 28H64"/><path d="M36 0V64M0 36H64"/><path d="M40 0V64M0 40H64"/><path d="M44 0V64M0 44H64"/><path d="M52 0V64M0 52H64"/><path d="M56 0V64M0 56H64"/><path d="M60 0V64M0 60H64"/></g>
+<g stroke="#E58FA3" stroke-width="1.4"><path d="M16 0V64M0 16H64"/><path d="M32 0V64M0 32H64"/><path d="M48 0V64M0 48H64"/></g>
+<polyline points="2,37 17,37 21,40 27,13 33,49 37,37 42,37 46,31 50,37 62,37" fill="none" stroke="#1A1A1A" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+</g>
+<rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.3" fill="none" stroke="#E58FA3" stroke-width="1.5"/>
+</svg>
