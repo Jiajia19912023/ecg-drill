@@ -9,6 +9,7 @@ import { answerFor, dueReviews, nextAfter, practiceById, sameAns, statKey } from
 import { CASES, LEVEL_STEPS, STEPS, type Level, type PracticeCase } from '@/data/cases';
 import { GUIDE_QS, GUIDE_TAB, caseById } from '@/data/guide';
 import { QZ } from '@/data/quiz';
+import { clearResume, loadResume, restoreSess, saveResume } from '@/lib/resume';
 import { ansOf } from '@/data/readquiz';
 import { AppContext, type Actions, type AppApi, type NavTo, type QuickSess, type QuizSess, type Screen, type State, type StepSess } from './AppCtx';
 import { Modals, Toast } from './Modals';
@@ -74,6 +75,14 @@ export default function App({ lang }: { lang: Lang }) {
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timed]);
+
+  // 途中でやめた練習・クイズを自動保存(画面を閉じてもホームから続きができる)
+  useEffect(() => {
+    if (!mounted) return;
+    const sc = S.screen, ss = S.sess;
+    if ((sc === 'step' || sc === 'quick' || sc === 'quiz') && ss && !(ss.kind === 'quick' && ss.sample)) saveResume(sc, ss);
+    else if (sc === 'stepResult' || sc === 'quizResult' || (sc === 'quickResult' && !(ss?.kind === 'quick' && ss.sample))) clearResume();
+  });
 
   const L = useCallback((ja: string, en: string) => (lang === 'ja' ? ja : en), [lang]);
   const t = useCallback((x: Tx) => tx(x, lang), [lang]);
@@ -341,7 +350,13 @@ export default function App({ lang }: { lang: Lang }) {
     },
     askReset() { S.confirmReset = true; render(); },
     cancelReset() { S.confirmReset = false; render(); },
-    doReset() { storeRef.current = emptyStore(); save(); S.confirmReset = false; go('home'); },
+    resume() {
+      const d = loadResume(); const ss = d ? restoreSess(d) : null;
+      if (!d || !ss) { clearResume(); return render(); }
+      S.sess = ss; go(d.screen);
+    },
+    discardResume() { clearResume(); render(); },
+    doReset() { storeRef.current = emptyStore(); save(); clearResume(); S.confirmReset = false; go('home'); },
     setLang(l) {
       if (l === lang) return;
       try { sessionStorage.setItem(START_KEY, S.screen === 'splash' ? 'home' : S.screen === 'settings' ? 'settings' : 'home'); } catch { /* 無視 */ }

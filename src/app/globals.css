@@ -208,3 +208,4 @@ html.dark .modal .sheet .paper{filter:invert(1) hue-rotate(180deg)}
 .hbar b{text-align:right}
 @media (prefers-reduced-motion:reduce){.knob,.toast{transition:none}}
 .splash .beat path{stroke-dasharray:4000;stroke-dashoffset:4000}
+.resume{background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}

@@ -3,6 +3,9 @@
 import { CASES, LEVEL_COLORS, LEVEL_NAMES, LEVELS } from '@/data/cases';
 import { KNOW_N, READ_N } from '@/data/quiz';
 import { dueReviews } from '@/lib/logic';
+import { loadResume, type Saved } from '@/lib/resume';
+import { LEVEL_STEPS } from '@/data/cases';
+import { QZ } from '@/data/quiz';
 import { useApp } from '../AppCtx';
 import { IC, LvBadge, Mark, NavBar, PaperThumb } from '../ui';
 
@@ -17,6 +20,7 @@ export function Home() {
         <div className="row-b" style={{ height: 48 }}>
           <div className="row" style={{ gap: 10 }}><Mark /><span style={{ fontSize: 20, fontWeight: 800, letterSpacing: '.04em' }}>ECG DRILL</span></div>
         </div>
+        <ResumeCard />
         <section className="hero">
           <div className="row" style={{ gap: 12, alignItems: 'flex-start' }}>
             <PaperThumb size={56} cls="hthumb" />
@@ -79,5 +83,43 @@ export function Home() {
       </main>
       <NavBar on="home" />
     </>
+  );
+}
+
+/** 途中でやめた練習・クイズの「続きをやる/削除する」 */
+function ResumeCard() {
+  const { L, t, act, lang } = useApp();
+  const d: Saved | null = loadResume();
+  if (!d) return null;
+  let title = '', detail = '';
+  if (d.screen === 'step') {
+    const ss = d.sess, n = LEVEL_STEPS[ss.level].length;
+    title = L('順番に読む練習', 'Step-by-step reading') + L('(', ' (') + t(LEVEL_NAMES[ss.level]) + L(')', ')');
+    detail = L(`ステップ ${ss.idx + 1} / ${n}`, `Step ${ss.idx + 1} of ${n}`);
+  } else if (d.screen === 'quick') {
+    const ss = d.sess;
+    title = { practice: L('クイック判読・練習', 'Quick read · Practice'), s60: L('60秒チャレンジ', '60-second challenge'), review: L('今日の復習', 'Today’s review') }[ss.sub];
+    const score = L(`正解 ${ss.correct}・不正解 ${ss.wrong}`, `${ss.correct} correct · ${ss.wrong} wrong`);
+    if (ss.sub === 's60') { const rem = Math.max(0, Math.ceil((60000 - (d.savedAt - ss.start) - ss.penalty) / 1000)); detail = L(`残り ${rem}秒・`, `${rem} s left · `) + score; }
+    else if (ss.sub === 'review') detail = L(`${ss.i + 1} / ${ss.queue.length}問目・`, `Case ${ss.i + 1} of ${ss.queue.length} · `) + score;
+    else detail = L(`${ss.i + 1}問目・`, `Case ${ss.i + 1} · `) + score;
+  } else {
+    const ss = d.sess, cat = QZ.cats.find((c) => c.id === ss.cat);
+    title = L('基礎クイズ', 'Basics quiz') + L(':', ': ') + (cat ? t(cat.name) : ss.cat === 0 ? L('心電図を読む(ランダム)', 'Reading ECGs (random)') : L('基礎知識(ランダム)', 'Basics (random)'));
+    detail = L(`${ss.i + 1} / ${ss.listIds.length}問目`, `Question ${ss.i + 1} of ${ss.listIds.length}`);
+  }
+  const when = new Date(d.savedAt).toLocaleString(lang === 'ja' ? 'ja-JP' : 'en-US', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  return (
+    <section className="resume" aria-label={L('途中の練習', 'Unfinished practice')}>
+      <div className="col" style={{ gap: 2 }}>
+        <span className="sub" style={{ color: '#1D4ED8', fontWeight: 700 }}>{L('途中でやめた練習があります', 'You have unfinished practice')}</span>
+        <b style={{ fontSize: 15 }}>{title}</b>
+        <span className="sub">{detail}{L(`(${when} に保存)`, ` (saved ${when})`)}</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        <button type="button" className="btn sec" style={{ height: 44, fontSize: 15 }} onClick={act.discardResume}>{L('削除する', 'Delete')}</button>
+        <button type="button" className="btn pri" style={{ height: 44, fontSize: 15 }} onClick={act.resume}>{L('続きをやる', 'Continue')}</button>
+      </div>
+    </section>
   );
 }
