@@ -36,8 +36,6 @@ export type State = {
   revSample: boolean;
   qmOpen: Record<string, boolean>;
   confirmReset: boolean;
-  showExport: boolean;
-  importMsg: string;
   fadeIn: boolean;
   swap: boolean; // 言語・色を変えるとき、いったん薄く消す
   softIn: boolean; // 言語を変えたあと、ゆっくり現れる
@@ -56,7 +54,7 @@ export type Actions = {
   theme(t: 'light' | 'dark'): void; qmToggle(g: string): void;
   gstart(): void; gsel(v: string): void; gnext(): void; gprev(): void; gjump(k: string): void; gshow(id: string): void;
   info(id: string): void; closeInfo(): void;
-  copyExport(): Promise<boolean>; toggleExport(): void; importRec(text: string): void; askReset(): void; cancelReset(): void; doReset(): void;
+  askReset(): void; cancelReset(): void; doReset(): void;
   setLang(l: Lang): void;
   resume(): void; discardResume(): void; quit(): void;
 };

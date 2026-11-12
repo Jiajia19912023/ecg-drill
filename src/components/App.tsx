@@ -30,7 +30,7 @@ const SOFT_KEY = 'ecgdrill-softin';
 const SWAP_MS = 450; // 消えるまでの時間
 const initialState = (): State => ({
   screen: 'splash', sess: null, modal: null, info: null, g: null, cmp: null, back: 'home', revSample: false,
-  qmOpen: {}, confirmReset: false, showExport: false, importMsg: '', fadeIn: false, swap: false, softIn: false, leaving: false, toast: null,
+  qmOpen: {}, confirmReset: false, fadeIn: false, swap: false, softIn: false, leaving: false, toast: null,
 });
 
 export default function App({ lang }: { lang: Lang }) {
@@ -343,18 +343,6 @@ export default function App({ lang }: { lang: Lang }) {
     gshow(id) { const g = S.g!; g.res = { ...(g.res || { forId: id }), id, tab: GUIDE_TAB[id] || 'limb', overlay: false } as typeof g.res; render(); window.scrollTo(0, 0); },
     info(id) { S.info = id; render(); },
     closeInfo() { S.info = null; render(); },
-    async copyExport() {
-      try { await navigator.clipboard.writeText(JSON.stringify(storeRef.current)); return true; } catch { S.showExport = true; render(); return false; }
-    },
-    toggleExport() { S.showExport = !S.showExport; render(); },
-    importRec(text) {
-      try {
-        const s = JSON.parse(text);
-        if (!s || s.v !== 1) throw new Error('bad');
-        storeRef.current = { ...emptyStore(), ...s }; save(); S.importMsg = L('読み込みました。', 'Records imported.');
-      } catch { S.importMsg = L('読み込めませんでした。書き出した内容をそのまま貼り付けてください。', 'Could not import. Paste the exported text exactly as it was copied.'); }
-      render();
-    },
     askReset() { S.confirmReset = true; render(); },
     cancelReset() { S.confirmReset = false; render(); },
     resume() {
